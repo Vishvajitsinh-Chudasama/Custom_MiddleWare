@@ -1,0 +1,48 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Logger App - Request Logs</title>
+    <link rel="stylesheet" href="{% static 'loggerapp/css/style.css' %}" />
+    <link rel="icon" href="{% static 'loggerapp/images/favicon.ico' %}" type="image/x-icon" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <h1>Request Logs</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Timestamp</th>
+                <th>Method</th>
+                <th>Path</th>
+                <th>Status Code</th>
+                <th>Error Message</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for log in logs %}
+            <tr>
+                <td>{{ log.timestamp }}</td>
+                <td>{{ log.method }}</td>
+                <td>{{ log.path }}</td>
+                <td>{{ log.status_code }}</td>
+                <td>{% if log.error_message %}<pre>{{ log.error_message }}</pre>{% else %}-{% endif %}</td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="5">No logs available.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <h2>Status Codes Chart</h2>
+    <canvas id="statusChart" width="600" height="300"
+    data-labels='{{ status_labels|safe }}'
+    data-counts='{{ status_counts|safe }}'></canvas>
+
+
+    <script src="{% static 'loggerapp/js/script.js' %}"></script>
+</body>
+</html>
